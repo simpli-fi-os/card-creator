@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simpli-FI ID | Your Digital Command Center</title>
+    <meta name="description" content="Claim your Simpli-FI ID. The professional digital identity for the Simpli-FI Operating System.">
+   
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://id.simpli-fi-os.com/">
+    <meta property="og:title" content="Simpli-FI ID | Your Digital Command Center">
+    <meta property="og:description" content="Stop handing out dead links. Claim your professional digital identity for the Simpli-FI Operating System.">
+    <meta property="og:image" content="https://id.simpli-fi-os.com/social-preview.png">
+    <!-- Twitter / X -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://id.simpli-fi-os.com/">
+    <meta property="twitter:title" content="Simpli-FI ID | Your Digital Command Center">
+    <meta property="twitter:description" content="Stop handing out dead links. Claim your professional digital identity for the Simpli-FI Operating System.">
+    <meta property="twitter:image" content="https://id.simpli-fi-os.com/social-preview.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+   
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+   
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        navy: '#1e293b',
+                        gold: '#fbbf24',
+                        teal: '#214F4B',
+                        coral: '#E27D60',
+                        offwhite: '#F9FAFB',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .mesh-gradient {
+            background-color: #F9FAFB;
+            background-image: radial-gradient(at 0% 0%, rgba(33, 79, 75, 0.1) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(251, 191, 36, 0.1) 0px, transparent 50%);
+        }
+        html { scroll-behavior: smooth; }
+        .info-popup {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: bottom center;
+        }
+        .info-popup.hidden {
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+            pointer-events: none;
+        }
+        .info-popup.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-offwhite text-navy font-sans antialiased mesh-gradient min-h-screen flex flex-col">
+    <!-- NAVIGATION -->
+    <nav class="w-full py-6 sticky top-0 z-50 backdrop-blur-sm bg-offwhite/80 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+            <a href="https://www.simpli-fi-OS.com" class="flex items-center gap-2 group">
+                <div class="w-8 h-8 bg-navy text-gold flex items-center justify-center rounded-lg shadow-md group-hover:scale-105 transition">
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                </div>
+                <span class="font-serif font-bold text-navy text-lg">Simpli-FI <span class="text-gold">OS</span></span>
+            </a>
+            <a href="https://generator.simpli-fi-os.com/" class="px-5 py-2 bg-navy text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-teal transition shadow-lg transform hover:-translate-y-0.5">
+                Claim ID
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="pt-16 pb-24 text-center px-4">
+        <div class="max-w-3xl mx-auto animate-slide-up">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm mb-6">
+                <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+                <span class="text-[10px] font-bold tracking-widest text-navy uppercase">System Status: Live</span>
+            </div>
+            <h1 class="text-5xl lg:text-7xl font-serif text-navy mb-6 tracking-tight">
+                Your Digital <br><span class="italic text-teal">Command Center.</span>
+            </h1>
+            <p class="text-lg text-gray- 600 mb-8 max-w-xl mx-auto font-light leading-relaxed">
+                Stop handing out dead links. The Simpli-FI ID is a dynamic portal to your business, your calendar, and your current mission.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center text-left max-w-2xl mx-auto mt-12 bg-white/60 backdrop-blur-sm p-6 rounded-2xl shadow-sm border border-gray-100">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="x-circle" class="w-4 h-4 text-coral"></i>
+                        <h3 class="text-xs font-bold text-navy uppercase tracking-wide">The Friction</h3>
+                    </div>
+                    <p class="text-sm text-gray-500">
+                        Paper cards get lost. Linktrees look generic. Neither tells people <em>how</em> to help you right now.
+                    </p>
+                </div>
+                <div class="w-px bg-gray-200 hidden sm:block"></div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-teal"></i>
+                        <h3 class="text-xs font-bold text-navy uppercase tracking-wide">The Fix</h3>
+                    </div>
+                    <p class="text-sm text-gray-500">
+                        A Tiered Identity System. Showcase your brand, sync your goals, and direct traffic with authority.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- PRICING TIERS -->
+    <section class="max-w-5xl mx-auto px-4 mb-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition duration-300">
+                <span class="text-[10px] font-bold bg-gray-100 text-gray-500 px-2 py-1 rounded uppercase">Ambassador</span>
+                <div class="mt-4 flex items-baseline gap-1"><span class="text-3xl font-bold text-navy">Free</span></div>
+                <p class="text-xs text-gray-400 mt-2 border-b border-gray-100 pb-4 mb-4">Perfect for digital networking.</p>
+                <ul class="space-y-3 text-xs text-gray-600">
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-teal"></i> Mobile-Optimized ID</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-teal"></i> Standard Simpli-FI Hosting</li>
+                    <li class="flex items-center gap-2 text-gray-400"><i data-lucide="minus" class="w-3 h-3"></i> Ad-Supported Footer</li>
+                    <li class="flex items-center gap-2 text-gray-400"><i data-lucide="x" class="w-3 h-3 text-coral"></i> No "Save Contact" Function</li>
+                </ul>
+            </div>
+            <div class="bg-navy p-6 rounded-2xl border border-navy shadow-xl relative transform md:-translate-y-4 hover:scale-105 transition duration-300">
+                <div class="absolute top-0 right-0 bg-gold text-navy text-[10px] font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl uppercase">Most Popular</div>
+                <span class="text-[10px] font-bold bg-white/10 text-white px-2 py-1 rounded uppercase">Professional</span>
+                <div class="mt-4 flex items-baseline gap-1"><span class="text-3xl font-bold text-white">$19</span> <span class="text-xs text-gray-400">/ one-time</span></div>
+                <p class="text-xs text-gray-300 mt-2 border-b border-white/10 pb-4 mb-4">Clean, functional, and ad-free.</p>
+                <ul class="space-y-3 text-xs text-gray-300">
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-gold"></i> <strong>Save to Contacts Button</strong></li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-gold"></i> No Ad Banner</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-gold"></i> 1 Free Update / Year</li>
+                    <li class="flex items-center gap-2 text-gray-500"><i data-lucide="minus" class="w-3 h-3"></i> Standard Hosting</li>
+                </ul>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition duration-300">
+                <span class="text-[10px] font-bold bg-teal/10 text-teal px-2 py-1 rounded uppercase">Executive</span>
+                <div class="mt-4 flex items-baseline gap-1"><span class="text-3xl font-bold text-navy">$49</span> <span class="text-xs text-gray-400">+ $5/mo</span></div>
+                <p class="text-xs text-gray-400 mt-2 border-b border-gray-100 pb-4 mb-4">Total control and prestige.</p>
+                <ul class="space-y-3 text-xs text-gray-600">
+                    <li class="flex items-center gap-2"><i data-lucide="star" class="w-3 h-3 text-gold"></i> <strong>Custom Domain Hosting</strong></li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-teal"></i> Unlimited Change Orders</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-teal"></i> Verified Gold Badge</li>
+                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-3 h-3 text-teal"></i> Priority Support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE PREVIEW SECTION -->
+    <section class="max-w-6xl mx-auto px-4 mb-24">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-serif text-navy mb-4">See It In Action</h2>
+            <p class="text-gray-500">Real examples of Simpli-FI Digital IDs.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-12">
+            <div class="rounded-3xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition duration-300">
+                <img src="https://files.constantcontact.com/3720c3fd901/040f4544-8335-483d-80b4-b42f8d718fba.png" alt="Hunter's ID" class="w-full h-auto">
+            </div>
+            <div class="rounded-3xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition duration-300">
+                <img src="https://files.constantcontact.com/3720c3fd901/42685625-3892-4ec3-9b96-7c607b0f4086.png" alt="Lindsey's ID" class="w-full h-auto">
+            </div>
+            <div class="rounded-3xl shadow-xl overflow-hidden border border-gray-200 hover:shadow-2xl transition duration-300">
+                <img src="https://files.constantcontact.com/3720c3fd901/ac004f7a-83a8-40ca-b26e-828958065be2.png" alt="Colby's ID" class="w-full h-auto">
+            </div>
+        </div>
+        <div class="bg-white rounded-3xl border border-gray-100 p-8 shadow-md max-w-4xl mx-auto">
+            <h3 class="text-center text-xs font-bold text-navy uppercase tracking-widest mb-6">Interactive Command Center Features</h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+                <div class="flex flex-col items-center gap-2 group">
+                    <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition flex items-center justify-center text-navy shadow-sm"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                    <span class="text-xs font-medium text-gray-500">Instant Call</span>
+                </div>
+                <div class="flex flex-col items-center gap-2 group">
+                    <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition flex items-center justify-center text-navy shadow-sm"><i data-lucide="mail" class="w-5 h-5"></i></div>
+                    <span class="text-xs font-medium text-gray-500">Email Direct</span>
+                </div>
+                <div class="flex flex-col items-center gap-2 group">
+                    <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition flex items-center justify-center text-navy shadow-sm"><i data-lucide="globe" class="w-5 h-5"></i></div>
+                    <span class="text-xs font-medium text-gray-500">Visit Website</span>
+                </div>
+                <div class="relative flex flex-col items-center gap-2 group cursor-pointer" onclick="togglePopup('popup-calendar', event)">
+                    <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition flex items-center justify-center text-navy shadow-sm"><i data-lucide="calendar" class="w-5 h-5"></i></div>
+                    <span class="text-xs font-medium text-gray-500 border-b border-dashed border-gray-300 group-hover:border-navy transition">Book Meeting</span>
+                    <div id="popup-calendar" class="info-popup hidden absolute bottom-full mb-3 w-56 bg-navy text-white p-4 rounded-xl shadow-2xl z-20 text-left pointer-events-none">
+                        <h4 class="text-gold font-bold text-xs uppercase tracking-wider mb-1">Frictionless Scheduling</h4>
+                        <p class="text-[10px] leading-relaxed text-gray-300">Connects seamlessly with Calendly, Google, or Outlook to let prospects book time instantly without the back-and-forth.</p>
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-navy"></div>
+                    </div>
+                </div>
+                <div class="relative flex flex-col items-center gap-2 group cursor-pointer" onclick="togglePopup('popup-save', event)">
+                    <div class="w-12 h-12 rounded-2xl bg-gold/10 group-hover:bg-gold group-hover:text-navy transition flex items-center justify-center text-gold shadow-sm"><i data-lucide="save" class="w-5 h-5"></i></div>
+                    <span class="text-xs font-bold text-navy border-b border-dashed border-navy/30 group-hover:border-navy transition">Save Contact</span>
+                    <div id="popup-save" class="info-popup hidden absolute bottom-full mb-3 w-56 bg-navy text-white p-4 rounded-xl shadow-2xl z-20 text-left pointer-events-none">
+                        <h4 class="text-gold font-bold text-xs uppercase tracking-wider mb-1">One-Tap Magic</h4>
+                        <p class="text-[10px] leading-relaxed text-gray-300">Instantly downloads your vCard file. Saves your photo, bio, website, and social links directly into their phone contacts.</p>
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-navy"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-[10px] text-gray-400 mt-8 italic">* Tap the <span class="font-bold text-navy">Book Meeting</span> or <span class="font-bold text-navy">Save Contact</span> icons above to learn more.</p>
+        </div>
+    </section>
+
+    <!-- INTAKE ENGINE -->
+    <section id="claim" class="flex-grow pb-24 scroll-mt-24">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200 text-center py-16 px-8 relative">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal to-gold"></div>
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-gold/10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-teal/10 rounded-full blur-3xl"></div>
+                <div class="w-20 h-20 bg-offwhite rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner relative z-10">
+                    <i data-lucide="file-check" class="w-10 h-10 text-navy"></i>
+                </div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-serif text-navy mb-4">Ready to Launch?</h2>
+                    <p class="text-gray-500 max-w-md mx-auto mb-10 leading-relaxed">
+                        Click below to open the secure intake portal and claim your Simpli-FI ID.
+                    </p>
+                    <a href="https://generator.simpli-fi-os.com/" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 bg-navy text-white font-bold rounded-xl shadow-xl hover:bg-teal hover:-translate-y-1 transition-all duration-300 group">
+                        <span>Launch Secure Intake Form</span>
+                        <i data-lucide="external-link" class="w-5 h-5 group-hover:text-gold transition-colors"></i>
+                    </a>
+                    <div class="mt-8 flex justify-center gap-6 text-xs text-gray-400 uppercase tracking-widest font-medium">
+                        <span class="flex items-center gap-1"><i data-lucide="shield" class="w-3 h-3"></i> Encrypted</span>
+                        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 5 Min Setup</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-navy py-8 mt-auto border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-white/40 text-xs font-mono">
+                SYSTEM_ID: SFI-V2.0 // <span class="text-gold animate-pulse">ONLINE</span>
+            </div>
+            <div class="flex gap-6 text-xs text-gray-400">
+                <a href="https://www.simpli-fi-os.com" class="hover:text-white transition">Return to Mothership</a>
+                <a href="#" class="hover:text-white transition">Support</a>
+                <a href="#" class="hover:text-white transition">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        function togglePopup(id, event) {
+            event.stopPropagation();
+            const allPopups = document.querySelectorAll('.info-popup');
+            allPopups.forEach(p => { if (p.id !== id) { p.classList.add('hidden'); p.classList.remove('visible'); } });
+            const popup = document.getElementById(id);
+            if (popup.classList.contains('hidden')) {
+                popup.classList.remove('hidden');
+                setTimeout(() => popup.classList.add('visible'), 10);
+            } else {
+                popup.classList.remove('visible');
+                setTimeout(() => popup.classList.add('hidden'), 200);
+            }
+        }
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.info-popup').forEach(p => {
+                p.classList.remove('visible');
+                setTimeout(() => p.classList.add('hidden'), 200);
+            });
+        });
+    </script>
+</body>
+</html>
