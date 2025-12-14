@@ -10,6 +10,11 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- QR Code Generator Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- Firebase SDKs (Compat 11.6.1) -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
 
     <style>
         body { background-color: #F3F4F6; }
@@ -37,9 +42,10 @@
                     <p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Denton Fire Department</p>
                 </div>
             </div>
-            <!-- Profile Avatar (Captain Lott) -->
-            <div class="w-10 h-10 rounded-full bg-slate-600 border-2 border-[#fbbf24] overflow-hidden">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hunter" class="w-full h-full object-cover">
+            <!-- Profile Avatar (Dynamic) -->
+            <div class="w-10 h-10 rounded-full bg-slate-600 border-2 border-[#fbbf24] overflow-hidden relative">
+                <!-- Added ID 'profile-avatar' to target this image -->
+                <img id="profile-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Loading" class="w-full h-full object-cover transition-opacity duration-300">
             </div>
         </div>
 
@@ -135,13 +141,59 @@
     </div>
 
     <script>
+        // --- 1. FIREBASE CONFIGURATION (Same as ID Card) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAnlmGZNwoPS-vBnK1AlHvNsB73q0UAkCU",
+            authDomain: "simpli-fi-id.firebaseapp.com",
+            projectId: "simpli-fi-id",
+            storageBucket: "simpli-fi-id.firebasestorage.app",
+            messagingSenderId: "97006103916",
+            appId: "1:97006103916:web:631c876a6eb263caf81749"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // --- 2. USER PROFILE FETCHING ---
+        async function fetchUserProfile() {
+            // Get 'u' param from URL (passed from ID card)
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('u');
+
+            if (!userId) {
+                console.warn("No user ID provided. Using default avatar.");
+                return;
+            }
+
+            try {
+                // Anonymous auth to read DB
+                await auth.signInAnonymously();
+                
+                // Fetch User Doc
+                const doc = await db.collection('users').doc(userId).get();
+                
+                if (doc.exists) {
+                    const userData = doc.data();
+                    
+                    // Update Profile Picture if available
+                    if (userData.avatar_url) {
+                        const avatarEl = document.getElementById('profile-avatar');
+                        avatarEl.src = userData.avatar_url;
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        }
+
         // --- DATA STORE (Mock Data - Fire Department Specific) ---
         let resources = [
             {
                 id: 1,
                 title: "After the Fire Guide",
                 category: "public",
-                url: "https://www.cityofdenton.com/393/Fire-Rescue", // Updated to real Denton Fire Link
+                url: "https://www.cityofdenton.com/393/Fire-Rescue", 
                 icon: "flame",
                 color: "text-orange-500",
                 bg: "bg-orange-50"
@@ -179,6 +231,7 @@
         window.onload = function() {
             renderResources(resources);
             lucide.createIcons();
+            fetchUserProfile(); // Trigger the Firebase fetch
         };
 
         // --- RENDER LOGIC ---
