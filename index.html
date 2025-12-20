@@ -488,49 +488,89 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-3xl border border-gray-200 p-8 shadow-lg max-w-4xl mx-auto relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+        <div class="bg-white rounded-3xl border border-gray-200 p-8 shadow-lg max-w-4xl mx-auto relative group">
+            <!-- Background Container for clipping decoration -->
+            <div class="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            </div>
             
-            <h3 class="text-center text-xs font-bold text-navy uppercase tracking-widest mb-8 relative z-10">Interactive Command Features</h3>
-            
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-y-8 gap-x-4 text-center relative z-10">
-                <div class="flex flex-col items-center gap-2 group">
-                    <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition duration-300 flex items-center justify-center text-navy shadow-sm border border-gray-100"><i data-lucide="phone" class="w-5 h-5"></i></div>
-                    <span class="text-xs font-medium text-gray-500">Instant Call</span>
-                </div>
-                <div class="flex flex-col items-center gap-2 group">
-                    <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition duration-300 flex items-center justify-center text-navy shadow-sm border border-gray-100"><i data-lucide="mail" class="w-5 h-5"></i></div>
-                    <span class="text-xs font-medium text-gray-500">Email Direct</span>
-                </div>
-                <div class="flex flex-col items-center gap-2 group">
-                    <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition duration-300 flex items-center justify-center text-navy shadow-sm border border-gray-100"><i data-lucide="globe" class="w-5 h-5"></i></div>
-                    <span class="text-xs font-medium text-gray-500">Visit Website</span>
-                </div>
+            <!-- Content (No overflow hidden) -->
+            <div class="relative z-10">
+                <h3 class="text-center text-xs font-bold text-navy uppercase tracking-widest mb-8 relative z-10">Interactive Command Features</h3>
                 
-                <!-- Interactive Tooltip 1 -->
-                <div class="relative flex flex-col items-center gap-2 group cursor-pointer" onclick="togglePopup('popup-calendar', event)">
-                    <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition duration-300 flex items-center justify-center text-navy shadow-sm border border-gray-100 animate-pulse"><i data-lucide="calendar" class="w-5 h-5"></i></div>
-                    <span class="text-xs font-medium text-navy border-b border-dashed border-gray-300 group-hover:border-navy transition">Book Meeting</span>
-                    <div id="popup-calendar" class="info-popup hidden absolute bottom-full mb-4 w-64 bg-navy text-white p-5 rounded-xl shadow-2xl z-20 text-left pointer-events-none ring-1 ring-white/10">
-                        <h4 class="text-gold font-bold text-xs uppercase tracking-wider mb-2">Frictionless Scheduling</h4>
-                        <p class="text-[11px] leading-relaxed text-gray-300">Connects seamlessly with Calendly, Google, or Outlook. Prospects book time instantly without the back-and-forth email tag.</p>
-                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-4 h-4 bg-navy"></div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-y-8 gap-x-4 text-center relative z-10">
+                    <div class="flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition duration-300 flex items-center justify-center text-navy shadow-sm border border-gray-100"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                        <span class="text-xs font-medium text-gray-500">Instant Call</span>
                     </div>
-                </div>
-                
-                <!-- Interactive Tooltip 2 -->
-                <div class="relative flex flex-col items-center gap-2 group cursor-pointer" onclick="togglePopup('popup-save', event)">
-                    <div class="w-12 h-12 rounded-2xl bg-gold/10 group-hover:bg-gold group-hover:text-navy transition duration-300 flex items-center justify-center text-gold shadow-sm border border-gold/20"><i data-lucide="save" class="w-5 h-5"></i></div>
-                    <span class="text-xs font-bold text-navy border-b border-dashed border-navy/30 group-hover:border-navy transition">Save Contact</span>
-                    <div id="popup-save" class="info-popup hidden absolute bottom-full mb-4 w-64 bg-navy text-white p-5 rounded-xl shadow-2xl z-20 text-left pointer-events-none ring-1 ring-white/10">
-                        <h4 class="text-gold font-bold text-xs uppercase tracking-wider mb-2">One-Tap Magic</h4>
-                        <p class="text-[11px] leading-relaxed text-gray-300">Instantly downloads your vCard file. Saves your photo, bio, website, and social links directly into their phone contacts.</p>
-                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-4 h-4 bg-navy"></div>
+                    <div class="flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition duration-300 flex items-center justify-center text-navy shadow-sm border border-gray-100"><i data-lucide="mail" class="w-5 h-5"></i></div>
+                        <span class="text-xs font-medium text-gray-500">Email Direct</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2 group">
+                        <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition duration-300 flex items-center justify-center text-navy shadow-sm border border-gray-100"><i data-lucide="globe" class="w-5 h-5"></i></div>
+                        <span class="text-xs font-medium text-gray-500">Visit Website</span>
+                    </div>
+                    
+                    <!-- Interactive Tooltip 1 -->
+                    <div class="relative flex flex-col items-center gap-2 group cursor-pointer" onclick="togglePopup('popup-calendar', event)">
+                        <div class="w-12 h-12 rounded-2xl bg-offwhite group-hover:bg-navy group-hover:text-white transition duration-300 flex items-center justify-center text-navy shadow-sm border border-gray-100 animate-pulse"><i data-lucide="calendar" class="w-5 h-5"></i></div>
+                        <span class="text-xs font-medium text-navy border-b border-dashed border-gray-300 group-hover:border-navy transition">Book Meeting</span>
+                        <div id="popup-calendar" class="info-popup hidden absolute bottom-full mb-4 w-64 bg-navy text-white p-5 rounded-xl shadow-2xl z-50 text-left pointer-events-none ring-1 ring-white/10">
+                            <h4 class="text-gold font-bold text-xs uppercase tracking-wider mb-2">Frictionless Scheduling</h4>
+                            <p class="text-[11px] leading-relaxed text-gray-300">Connects seamlessly with Calendly, Google, or Outlook. Prospects book time instantly without the back-and-forth email tag.</p>
+                            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-4 h-4 bg-navy"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Tooltip 2 -->
+                    <div class="relative flex flex-col items-center gap-2 group cursor-pointer" onclick="togglePopup('popup-save', event)">
+                        <div class="w-12 h-12 rounded-2xl bg-gold/10 group-hover:bg-gold group-hover:text-navy transition duration-300 flex items-center justify-center text-gold shadow-sm border border-gold/20"><i data-lucide="save" class="w-5 h-5"></i></div>
+                        <span class="text-xs font-bold text-navy border-b border-dashed border-navy/30 group-hover:border-navy transition">Save Contact</span>
+                        <div id="popup-save" class="info-popup hidden absolute bottom-full mb-4 w-64 bg-navy text-white p-5 rounded-xl shadow-2xl z-50 text-left pointer-events-none ring-1 ring-white/10">
+                            <h4 class="text-gold font-bold text-xs uppercase tracking-wider mb-2">One-Tap Magic</h4>
+                            <p class="text-[11px] leading-relaxed text-gray-300">Instantly downloads your vCard file. Saves your photo, bio, website, and social links directly into their phone contacts.</p>
+                            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-4 h-4 bg-navy"></div>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <p class="text-center text-[10px] text-gray-400 mt-8 italic">* Tap the <span class="font-bold text-navy">Book Meeting</span> or <span class="font-bold text-navy">Save Contact</span> icons above to explore.</p>
+        </div>
+    </section>
+
+    <!-- INTAKE ENGINE (Restored) -->
+    <section id="claim" class="flex-grow pb-24 scroll-mt-24">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200 text-center py-16 px-8 relative group">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-teal via-navy to-gold"></div>
+                
+                <!-- Animated background blobs -->
+                <div class="absolute -top-12 -right-12 w-48 h-48 bg-gold/10 rounded-full blur-3xl group-hover:bg-gold/20 transition duration-700"></div>
+                <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-teal/10 rounded-full blur-3xl group-hover:bg-teal/20 transition duration-700"></div>
+                
+                <div class="w-20 h-20 bg-offwhite rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-gray-100 relative z-10 group-hover:scale-110 transition duration-300">
+                    <i data-lucide="file-check" class="w-9 h-9 text-navy"></i>
+                </div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-serif text-navy mb-4">Ready to Launch?</h2>
+                    <p class="text-gray-500 max-w-md mx-auto mb-10 leading-relaxed">
+                        Click below to open the secure intake portal and claim your Simpli-FI ID. Setup takes less than 5 minutes.
+                    </p>
+                    
+                    <a href="https://generator.simpli-fi-os.com/" class="inline-flex items-center gap-3 px-8 py-4 bg-navy text-white font-bold rounded-xl shadow-xl hover:bg-teal hover:-translate-y-1 transition-all duration-300 group">
+                        <span>Launch Secure Intake Form</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    
+                    <div class="mt-8 flex justify-center gap-6 text-[10px] text-gray-400 uppercase tracking-widest font-medium">
+                        <span class="flex items-center gap-1.5"><i data-lucide="shield" class="w-3.5 h-3.5"></i> Encrypted</span>
+                        <span class="flex items-center gap-1.5"><i data-lucide="zap" class="w-3.5 h-3.5"></i> Instant Delivery</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -556,87 +596,6 @@
 
     <script>
         lucide.createIcons();
-
-        /* --- Audio Manager --- */
-        // Web Audio API for guaranteed sound synthesis
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        // Unlock audio on ANY user INTERACTION 
-        // This ensures audio is likely ready before a click happens, assuming the browser allows it.
-        function unlockAudio() {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            // We keep listeners until unlocked or triggered once to be safe
-            // Ideally we remove them once state is running, but simple removal on first run is okay.
-            document.body.removeEventListener('mousemove', unlockAudio);
-            document.body.removeEventListener('mousedown', unlockAudio);
-            document.body.removeEventListener('touchstart', unlockAudio);
-            document.body.removeEventListener('keydown', unlockAudio);
-            document.body.removeEventListener('wheel', unlockAudio);
-        }
-
-        document.body.addEventListener('mousemove', unlockAudio, { once: true });
-        document.body.addEventListener('mousedown', unlockAudio, { once: true });
-        document.body.addEventListener('touchstart', unlockAudio, { once: true });
-        document.body.addEventListener('keydown', unlockAudio, { once: true });
-        document.body.addEventListener('wheel', unlockAudio, { once: true });
-
-        // Helper: Play a tone
-        function playTone(freq, time, duration) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = 'sawtooth'; // Brassy sound
-            osc.frequency.value = freq;
-            
-            gain.gain.setValueAtTime(0.1, time);
-            gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start(time);
-            osc.stop(time + duration);
-        }
-
-        // Fanfare Generator (Ta-da-da-DAAA!)
-        function playFanfare() {
-            // Last ditch effort to resume if still suspended
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume().catch(e => console.log("Audio still locked:", e));
-            }
-            
-            const now = audioCtx.currentTime;
-            // Notes: C4, E4, G4, C5
-            const C4 = 261.63;
-            const E4 = 329.63;
-            const G4 = 392.00;
-            const C5 = 523.25;
-
-            playTone(C4, now + 0.0, 0.2);
-            playTone(E4, now + 0.15, 0.2);
-            playTone(G4, now + 0.3, 0.2);
-            
-            // Final held note
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.value = C5;
-            gain.gain.setValueAtTime(0.15, now + 0.45);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5); // Long fade
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now + 0.45);
-            osc.stop(now + 1.5);
-        }
-        
-        // Simple Pop
-        function playPop(freq = 400) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            playTone(freq, audioCtx.currentTime, 0.1);
-        }
-
 
         /* --- UI Logic --- */
 
@@ -670,7 +629,6 @@
 
         // 1. Ambassador: Happy Confetti (Normal Gravity, Bright Colors, From Top)
         document.getElementById('ambassador-card').addEventListener('mouseenter', (e) => {
-            playPop(400); // Small pop
             const rect = e.target.getBoundingClientRect();
             const x = (rect.left + rect.width / 2) / window.innerWidth;
             const y = (rect.top) / window.innerHeight; // From the top
@@ -688,7 +646,6 @@
 
         // 2. Professional: Standard Burst
         document.getElementById('professional-card').addEventListener('mouseenter', (e) => {
-            playPop(500);
             const rect = e.target.getBoundingClientRect();
             const x = (rect.left + rect.width / 2) / window.innerWidth;
             const y = (rect.top + rect.height / 3) / window.innerHeight;
@@ -704,9 +661,6 @@
 
         // 3. Founder: Fireworks
         document.getElementById('founder-card').addEventListener('mouseenter', (e) => {
-             playPop(600);
-             setTimeout(() => playPop(700), 100);
-            
             const rect = e.target.getBoundingClientRect();
             const x = (rect.left + rect.width / 2) / window.innerWidth;
             const y = (rect.top) / window.innerHeight;
@@ -737,20 +691,9 @@
         });
 
         // 4. Enterprise: Trumpet Overlay + Fanfare
-        const trumpetOverlay = document.getElementById('trumpet-overlay');
         let trumpetTimeout;
 
         document.getElementById('enterprise-card').addEventListener('mouseenter', (e) => {
-            // Play Synth Fanfare
-            playFanfare();
-
-            // Show Trumpets
-            trumpetOverlay.classList.add('active');
-            clearTimeout(trumpetTimeout);
-            trumpetTimeout = setTimeout(() => {
-                trumpetOverlay.classList.remove('active');
-            }, 3000);
-
             const rect = e.target.getBoundingClientRect();
             const x = (rect.left + rect.width / 2) / window.innerWidth;
             const y = (rect.top + rect.height / 2) / window.innerHeight;
