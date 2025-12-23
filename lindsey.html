@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="robots" content="noindex, nofollow"> 
     
-    <!-- iOS Standalone Mode Configuration -->
+    <!-- iOS Standalone Mode -->
     <meta name="apple-mobile-web-app-title" content="Simpli-FI"> 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,13 +17,13 @@
     
     <title>Lindsey Lott | Simpli-FI Life</title>
     
-    <!-- Home Screen Icon & Favicon -->
+    <!-- Icons -->
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -31,26 +31,25 @@
                 extend: {
                     colors: {
                         brand: {
-                            primary: '#214F4B',   /* Velvet Teal */
-                            accent: '#E27D60',    /* Spiced Coral */
-                            pop: '#98A6D4',       /* Soft Cornflower */
-                            canvas: '#FBF9F7',    /* Oatmeal (Paper Base) */
-                            surface: '#EFEFEF',   
+                            primary: '#214F4B',
+                            accent: '#E27D60',
+                            pop: '#98A6D4',
+                            canvas: '#FBF9F7',
+                            surface: '#F0EFEB',
                         },
                         neu: {
-                            base: '#FBF9F7',      /* WARM PAPER BASE */
-                            shadow: '#D6D3CD',    /* Warm Shadow */
+                            base: '#FBF9F7',
+                            shadow: '#D6D3CD',
                             highlight: '#FFFFFF',
                         }
                     },
                     fontFamily: {
-                        sans: ['Nunito', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
                         serif: ['Playfair Display', 'serif'],
                     },
                     boxShadow: {
                         'neu-flat': '9px 9px 18px #D6D3CD, -9px -9px 18px #FFFFFF',
                         'neu-pressed': 'inset 6px 6px 12px #D6D3CD, inset -6px -6px 12px #FFFFFF',
-                        'neu-icon': '5px 5px 10px #D6D3CD, -5px -5px 10px #FFFFFF',
                         'neu-float': '25px 25px 50px #C5C2BC, -25px -25px 50px #ffffff',
                     },
                     backgroundImage: {
@@ -68,57 +67,17 @@
         
         a, button { -webkit-tap-highlight-color: transparent; }
 
-        /* Physics Elements (Portrait Only) */
-        .falling-box {
-            position: absolute;
-            background-color: #D4A373;
-            border: 2px solid #BC8A5F;
-            border-radius: 2px;
-            pointer-events: none;
-            z-index: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .falling-box::after {
-            content: '';
-            width: 100%;
-            height: 2px;
-            background-color: #BC8A5F;
-            position: absolute;
-            top: 50%;
-        }
-        
-        .rising-check {
-            position: absolute;
-            color: #214F4B;
-            pointer-events: none;
-            z-index: 0;
-            font-weight: bold;
-        }
-
-        /* Scroll Container */
-        #scroll-container {
-            height: 100vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            position: relative;
-            z-index: 10;
-            padding-bottom: 120px;
-        }
-
-        /* --- DEFAULT: PORTRAIT = FULL DETAILED CARD --- */
-        #portrait-view {
+        /* SIMPLE CARD VIEW (Default) */
+        #simple-view {
             opacity: 1;
-            transform: scale(1);
-            filter: blur(0px);
-            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            visibility: visible;
+            transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             z-index: 10;
         }
 
-        /* --- LANDSCAPE = SIMPLE NEUMORPHIC CARD --- */
-        #landscape-view {
+        /* FULL CARD VIEW (Expanded) */
+        #full-view {
             position: fixed;
             top: 0;
             left: 0;
@@ -126,204 +85,65 @@
             height: 100%;
             z-index: 20;
             opacity: 0;
-            pointer-events: none; 
-            transform: scale(1.1) rotate(-3deg); 
-            filter: blur(8px);
-            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: flex; 
+            visibility: hidden;
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #FBF9F7;
+            background: radial-gradient(#214F4B 1px, transparent 1px);
+            background-size: 24px 24px;
         }
 
-        /* TRUE LANDSCAPE MODE (Physical rotation) */
-        @media (orientation: landscape) {
-            #portrait-view {
-                opacity: 0;
-                transform: scale(0.95);
-                filter: blur(4px);
-                pointer-events: none;
-            }
-            #landscape-view {
-                opacity: 1;
-                pointer-events: auto;
-                transform: scale(1) rotate(0deg); 
-                filter: blur(0px);
-            }
-            body { overflow: hidden; }
-            #manual-trigger { display: none !important; }
-        }
-
-        /* FORCED LANDSCAPE MODE (for standalone PWA fallback) */
-        body.force-landscape {
-            overflow: hidden;
-        }
-        body.force-landscape #portrait-view {
+        body.show-full #simple-view {
             opacity: 0;
-            transform: scale(0.9);
-            filter: blur(4px);
-            pointer-events: none;
+            visibility: hidden;
+            transform: scale(1.05);
         }
-        body.force-landscape #landscape-view {
+        body.show-full #full-view {
             opacity: 1;
-            pointer-events: auto;
-            width: 100vh;
-            height: 100vw;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(90deg);
-            filter: blur(0px);
+            visibility: visible;
+            transform: scale(1);
         }
-        body.force-landscape #close-landscape-btn {
+
+        /* Neumorphic Toggle Buttons */
+        .toggle-btn {
+            position: fixed;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #FBF9F7;
+            box-shadow: 8px 8px 16px #D6D3CD, -8px -8px 16px #FFFFFF;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: all 0.4s ease;
+        }
+        .toggle-btn:hover {
+            box-shadow: 4px 4px 8px #D6D3CD, -4px -4px 8px #FFFFFF;
+            transform: scale(1.1);
+        }
+        .toggle-btn:active {
+            box-shadow: inset 4px 4px 8px #D6D3CD, inset -4px -4px 8px #FFFFFF;
         }
 
-        /* Close button hidden by default */
-        #close-landscape-btn {
-            display: none;
-        }
+        #expand-btn { bottom: 24px; right: 24px; }
+        #collapse-btn { top: 24px; right: 24px; }
 
-        /* Letterpress Text Effect */
+        /* Letterpress */
         .text-pressed-green {
             color: #214F4B; 
             text-shadow: 1px 1px 1px rgba(255,255,255,0.8), -1px -1px 0px rgba(33, 79, 75, 0.05);
         }
     </style>
 </head>
-<body class="fixed inset-0 bg-brand-canvas text-gray-700 bg-[radial-gradient(#214F4B_1px,transparent_1px)] [background-size:24px_24px]">
+<body class="fixed inset-0 bg-brand-canvas bg-[radial-gradient(#214F4B_1px,transparent_1px)] [background-size:24px_24px]">
 
-    <!-- ========================================== -->
-    <!--   PORTRAIT VIEW = FULL DETAILED CARD       -->
-    <!-- ========================================== -->
-    <div id="portrait-view" class="w-full h-full relative flex-col">
-        
-        <!-- Physics Overlay -->
-        <div id="physics-layer" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
-
-        <!-- Scrollable Area -->
-        <div id="scroll-container" class="w-full flex justify-center p-4">
-            
-            <!-- Full Featured Card -->
-            <main id="main-card" class="w-full max-w-md bg-white rounded-[2rem] shadow-2xl relative flex flex-col shrink-0 my-auto transition-transform duration-75 will-change-transform overflow-hidden border border-white/40">
-                
-                <!-- Top Banner -->
-                <div class="h-32 bg-brand-primary relative overflow-hidden shrink-0">
-                    <div class="absolute top-4 left-4 z-10 flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-white font-serif text-xl italic border border-white/20">S</div>
-                        <span class="font-serif text-white font-bold tracking-tight text-sm opacity-90">Simpli-FI <span class="font-light text-brand-pop">Life</span></span>
-                    </div>
-
-                    <button onclick="toggleQR()" aria-label="Show QR Code" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all border border-white/10 shadow-lg group">
-                        <i data-lucide="qr-code" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                    </button>
-
-                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#98A6D4_1px,transparent_1px)] [background-size:14px_14px]"></div>
-                    <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-brand-accent rounded-full opacity-30 blur-3xl"></div>
-                    <div class="absolute top-0 right-10 w-24 h-24 bg-brand-pop rounded-full opacity-20 blur-2xl"></div>
-                </div>
-
-                <!-- Profile Image -->
-                <div class="relative px-8 -mt-16 mb-6 text-center shrink-0">
-                    <div class="inline-block relative">
-                        <div class="w-32 h-32 rounded-full p-1.5 bg-white shadow-lg flex items-center justify-center relative z-10">
-                            <div class="w-full h-full rounded-full overflow-hidden relative">
-                                <img id="profile-photo" src="https://raw.githubusercontent.com/simpli-fi-os/assets/abc740cc26a619c8153bbfeafbcb85c23879fcdf/lindsey-lott.jpg" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=Lindsey&backgroundColor=E27D60'" alt="Lindsey Lott" class="w-full h-full object-cover object-center">
-                            </div>
-                        </div>
-                        <div class="absolute bottom-2 right-2 z-20 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-brand-accent">
-                            <i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4">
-                        <h1 class="font-serif text-3xl font-bold text-gray-800">Lindsey Lott</h1>
-                        <p class="text-brand-accent font-bold text-xs tracking-widest uppercase mt-2">Founder & Lead Organizer</p>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="grid grid-cols-4 gap-4 px-6 mb-8 shrink-0">
-                    <a href="tel:+12147693343" aria-label="Call Lindsey" class="flex flex-col items-center gap-2 group">
-                        <div class="w-14 h-14 rounded-2xl bg-brand-canvas border border-brand-surface shadow-sm flex items-center justify-center text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-all duration-200">
-                            <i data-lucide="phone" class="w-6 h-6"></i>
-                        </div>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">Call</span>
-                    </a>
-                    <a href="mailto:Lindsey@simpli-fi-life.com" aria-label="Email Lindsey" class="flex flex-col items-center gap-2 group">
-                        <div class="w-14 h-14 rounded-2xl bg-brand-canvas border border-brand-surface shadow-sm flex items-center justify-center text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-all duration-200">
-                            <i data-lucide="mail" class="w-6 h-6"></i>
-                        </div>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">Email</span>
-                    </a>
-                    <a href="https://new.simpli-fi-life.com" target="_blank" aria-label="Visit Website" class="flex flex-col items-center gap-2 group">
-                        <div class="w-14 h-14 rounded-2xl bg-brand-canvas border border-brand-surface shadow-sm flex items-center justify-center text-gray-500 group-hover:bg-brand-primary group-hover:text-white transition-all duration-200">
-                            <i data-lucide="globe" class="w-6 h-6"></i>
-                        </div>
-                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">Site</span>
-                    </a>
-                    <button id="save-btn" onclick="downloadVCard()" aria-label="Save Contact" class="flex flex-col items-center gap-2 group">
-                        <div class="w-14 h-14 rounded-2xl bg-brand-accent/10 border border-brand-accent/20 shadow-sm flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white transition-all duration-200">
-                            <i id="save-icon" data-lucide="contact" class="w-6 h-6"></i>
-                            <i id="loading-icon" data-lucide="loader-2" class="w-6 h-6 animate-spin hidden"></i>
-                        </div>
-                        <span id="save-text" class="text-[10px] text-brand-accent font-bold uppercase tracking-wide">Save</span>
-                    </button>
-                </div>
-
-                <!-- Current Mission -->
-                <div class="px-6 mb-8 shrink-0">
-                    <div class="relative bg-brand-canvas rounded-2xl p-6 border-l-4 border-brand-accent overflow-hidden">
-                        <div class="relative z-10">
-                            <div class="flex items-center gap-2 mb-2">
-                                <i data-lucide="target" class="w-4 h-4 text-brand-accent"></i>
-                                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Current Mission</h3>
-                            </div>
-                            <p class="text-gray-600 text-sm font-medium leading-relaxed italic">
-                                "Connecting 20 new business owners and program managers in the next 60 days to help them organize their physical spaces and inventory."
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bio -->
-                <div class="px-8 mb-6 shrink-0">
-                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">About</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed font-normal">
-                        My appreciation for organization & systems began as a Pediatric Nurse in the ER. Today, I apply that unique blend of clinical precision and practical space management to help families and businesses eliminate chaos.
-                    </p>
-                </div>
-
-                <!-- Footer -->
-                <a href="https://card.simpli-fi-os.com" target="_blank" class="block mt-auto py-4 text-center bg-brand-primary text-white">
-                    <div class="inline-flex items-center text-[10px] font-bold tracking-[0.2em] uppercase">
-                        <span class="mr-2">Powered by</span>
-                        <span class="text-brand-pop">Simpli-FI OS</span>
-                    </div>
-                </a>
-            </main>
-        </div>
-        
-        <!-- Manual Flip Button (visible only in portrait) -->
-        <button id="manual-trigger" onclick="toggleForceLandscape()" aria-label="View simple card (rotate device)" class="fixed bottom-6 right-6 z-40 bg-brand-primary text-white p-4 rounded-full shadow-2xl border-2 border-white/20 flex items-center gap-2 hover:scale-110 transition-transform active:scale-95">
-            <i data-lucide="rotate-cw" class="w-5 h-5"></i>
-            <span class="text-xs font-bold uppercase tracking-widest hidden md:inline">View Simple Card</span>
-        </button>
-    </div>
-
-
-    <!-- ========================================== -->
-    <!--   LANDSCAPE VIEW = SIMPLE NEUMORPHIC CARD   -->
-    <!-- ========================================== -->
-    <div id="landscape-view" class="p-8 bg-brand-canvas bg-[radial-gradient(#214F4B_1px,transparent_1px)] [background-size:24px_24px]">
-        
-        <!-- Close Button (visible only in forced mode) -->
-        <button id="close-landscape-btn" onclick="toggleForceLandscape()" aria-label="Return to full card" class="absolute top-6 right-6 z-50 w-12 h-12 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-brand-primary hover:bg-brand-primary hover:text-white transition-colors border border-gray-200">
-            <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-
-        <!-- Simple "Physical" Business Card -->
+    <!-- SIMPLE CARD VIEW (Neumorphic Business Card) -->
+    <div id="simple-view" class="p-8 h-full flex items-center justify-center">
         <div class="relative w-full max-w-4xl aspect-[1.75/1] bg-neu-base bg-paper-noise rounded-[2.5rem] shadow-neu-float flex items-center justify-between border border-stone-300/50 overflow-hidden">
-            
-            <!-- Left: Identity -->
             <div class="flex flex-col justify-between h-full w-2/3 p-12">
                 <div class="flex items-center gap-4">
                     <div class="w-16 h-16 rounded-2xl bg-neu-base shadow-neu-flat flex items-center justify-center text-brand-primary border border-white/20">
@@ -352,7 +172,6 @@
                 </div>
             </div>
 
-            <!-- Right: Brand Block -->
             <div class="w-1/3 h-full bg-brand-primary relative flex flex-col items-center justify-center pl-8">
                 <div class="absolute inset-0 bg-paper-noise opacity-30 mix-blend-overlay pointer-events-none"></div>
                 <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px] opacity-10"></div>
@@ -376,45 +195,266 @@
         </div>
     </div>
 
-    <!-- Modals remain unchanged (QR, Location Confirm) -->
-    <!-- ... (keeping your original modal HTML for brevity, but they are included in full code) ... -->
+    <!-- FULL CARD VIEW (Detailed / Long Form) -->
+    <div id="full-view">
+        <div id="scroll-container" class="w-full flex justify-center p-4 h-full overflow-y-auto">
+            <main id="main-card" class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-brand-surface relative flex flex-col my-auto">
+                <!-- Top Banner -->
+                <div class="h-32 bg-brand-primary relative overflow-hidden shrink-0">
+                    <div class="absolute top-4 left-4 z-10 flex items-center gap-2">
+                        <div class="w-8 h-8 bg-brand-primary text-brand-accent flex items-center justify-center font-serif text-xl italic rounded-br-lg rounded-tl-lg border border-brand-pop shadow-lg">S</div>
+                        <span class="font-serif text-white font-bold tracking-tight text-sm opacity-90">Simpli-FI <span class="font-light text-brand-pop">Life</span></span>
+                    </div>
+                    <button onclick="toggleQR()" aria-label="Show QR Code" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all border border-white/10 shadow-lg group">
+                        <i data-lucide="qr-code" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                    </button>
+                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#98A6D4_1px,transparent_1px)] [background-size:14px_14px]"></div>
+                    <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-brand-accent rounded-full opacity-30 blur-3xl"></div>
+                    <div class="absolute top-0 right-10 w-24 h-24 bg-brand-pop rounded-full opacity-20 blur-2xl"></div>
+                </div>
+
+                <!-- Profile -->
+                <div class="relative px-8 -mt-16 mb-6 text-center shrink-0">
+                    <div class="inline-block relative">
+                        <div class="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-brand-surface mx-auto relative z-10">
+                            <img id="profile-photo" src="https://raw.githubusercontent.com/simpli-fi-os/assets/abc740cc26a619c8153bbfeafbcb85c23879fcdf/lindsey-lott.jpg" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=Lindsey&backgroundColor=E27D60'" alt="Lindsey Lott" class="w-full h-full object-cover object-center">
+                        </div>
+                        <div class="absolute bottom-1 right-1 z-20 bg-brand-accent text-white rounded-full p-1.5 border-2 border-white shadow-sm">
+                            <i data-lucide="check" class="w-3 h-3 stroke-[4]"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h1 class="font-serif text-3xl font-bold text-brand-primary">Lindsey Lott</h1>
+                        <p class="text-brand-accent font-bold text-xs tracking-widest uppercase mt-1">Founder & Lead Organizer</p>
+                        <p class="text-slate-400 text-xs mt-1">Simpli-FI Life</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-4 gap-2 px-6 mb-6 shrink-0">
+                    <a href="tel:+12147693343" class="flex flex-col items-center gap-1 group">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-surface flex items-center justify-center text-slate-600 group-hover:bg-brand-primary group-hover:text-white transition shadow-sm border border-brand-surface">
+                            <i data-lucide="phone" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[10px] text-slate-500 font-medium">Call</span>
+                    </a>
+                    <a href="mailto:Lindsey@simpli-fi-life.com" class="flex flex-col items-center gap-1 group">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-surface flex items-center justify-center text-slate-600 group-hover:bg-brand-primary group-hover:text-white transition shadow-sm border border-brand-surface">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[10px] text-slate-500 font-medium">Email</span>
+                    </a>
+                    <a href="https://new.simpli-fi-life.com" target="_blank" class="flex flex-col items-center gap-1 group">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-surface flex items-center justify-center text-slate-600 group-hover:bg-brand-primary group-hover:text-white transition shadow-sm border border-brand-surface">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-[10px] text-slate-500 font-medium">Site</span>
+                    </a>
+                    <button id="save-btn" onclick="downloadVCard()" class="flex flex-col items-center gap-1 group">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white transition shadow-sm border border-brand-accent/20">
+                            <i id="save-icon" data-lucide="contact" class="w-5 h-5"></i>
+                            <i id="loading-icon" data-lucide="loader-2" class="w-5 h-5 animate-spin hidden"></i>
+                        </div>
+                        <span id="save-text" class="text-[10px] text-brand-accent font-bold">Save</span>
+                    </button>
+                </div>
+
+                <!-- Current Mission -->
+                <div class="px-6 mb-6 shrink-0">
+                    <div class="relative bg-gradient-to-r from-brand-accent/10 to-transparent p-4 rounded-xl border-l-4 border-brand-accent overflow-hidden">
+                        <div class="absolute right-0 top-0 opacity-5 transform translate-x-1/4 -translate-y-1/4">
+                            <i data-lucide="target" class="w-24 h-24 text-brand-accent"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i data-lucide="target" class="w-3 h-3 text-brand-accent"></i>
+                                <h3 class="text-[10px] font-bold text-brand-accent uppercase tracking-widest">Current Mission</h3>
+                            </div>
+                            <p class="text-brand-primary text-sm font-medium italic leading-relaxed">
+                                "Connecting 20 new business owners and program managers in the next 60 days to help them organize their physical spaces and inventory."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <div class="px-8 mb-6 shrink-0">
+                    <h3 class="text-xs font-bold text-brand-pop uppercase tracking-wider mb-2">About</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed font-light">
+                        My appreciation for organization & systems began as a Pediatric Nurse in the ER, where structure is essential. However, those skills were truly put to the test—and refined—as I transitioned to raising and homeschooling our four children. Today, I apply that unique blend of clinical precision and practical space management to help families and businesses eliminate chaos. I am also happily married to <a href="https://www.simpli-fi-alpha.com" target="_blank" class="text-brand-primary font-medium underline decoration-brand-accent/50 hover:decoration-brand-accent">Hunter Lott</a>.
+                    </p>
+                </div>
+
+                <!-- Contact Details -->
+                <div class="px-6 mb-8 space-y-3 shrink-0">
+                    <a href="tel:+12147693343" class="flex items-center p-3 rounded-xl bg-brand-canvas hover:bg-brand-surface transition group">
+                        <i data-lucide="smartphone" class="w-5 h-5 text-brand-accent group-hover:text-brand-primary"></i>
+                        <div class="ml-4">
+                            <p class="text-[10px] text-slate-400 uppercase tracking-wide">Mobile</p>
+                            <p class="text-sm font-medium text-slate-900">(214) 769-3343</p>
+                        </div>
+                    </a>
+                    <a href="mailto:Lindsey@simpli-fi-life.com" class="flex items-center p-3 rounded-xl bg-brand-canvas hover:bg-brand-surface transition group">
+                        <i data-lucide="at-sign" class="w-5 h-5 text-brand-accent group-hover:text-brand-primary"></i>
+                        <div class="ml-4">
+                            <p class="text-[10px] text-slate-400 uppercase tracking-wide">Email</p>
+                            <p class="text-sm font-medium text-slate-900">Lindsey@simpli-fi-life.com</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Social Links -->
+                <div class="bg-brand-surface/50 p-6 flex justify-center gap-6 border-t border-brand-surface mt-auto">
+                    <a href="https://www.instagram.com/simpli_fi_life/" target="_blank" aria-label="Instagram" class="text-slate-400 hover:text-brand-accent transition transform hover:scale-110"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="https://www.facebook.com/Simpli.FI.Intention" target="_blank" aria-label="Facebook" class="text-slate-400 hover:text-brand-accent transition transform hover:scale-110"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    <a href="https://www.youtube.com/@Simpli-FILife" target="_blank" aria-label="YouTube" class="text-slate-400 hover:text-brand-accent transition transform hover:scale-110"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+                    <a href="https://www.linkedin.com/in/lindsey-breanne-lott/" target="_blank" aria-label="LinkedIn" class="text-slate-400 hover:text-brand-accent transition transform hover:scale-110"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                </div>
+
+                <!-- Powered By Footer -->
+                <a href="https://card.simpli-fi-os.com" target="_blank" class="block bg-brand-primary py-3 text-center relative group cursor-pointer overflow-hidden decoration-0">
+                    <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition"></div>
+                    <div class="inline-flex items-center text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
+                        <span class="mr-2">Powered by</span>
+                        <span class="transition-all duration-300 group-hover:scale-110 group-hover:text-white flex items-center gap-1">
+                            Simpli-FI <span class="text-brand-pop group-hover:text-brand-accent transition-colors duration-300">OS</span>
+                        </span>
+                    </div>
+                </a>
+            </main>
+        </div>
+    </div>
+
+    <!-- Expand (+) Button -->
+    <button id="expand-btn" onclick="expandCard()" aria-label="Expand to full view" class="toggle-btn">
+        <i data-lucide="plus" class="w-8 h-8 text-brand-primary"></i>
+    </button>
+
+    <!-- Collapse (-) Button -->
+    <button id="collapse-btn" onclick="collapseCard()" aria-label="Return to simple view" class="toggle-btn">
+        <i data-lucide="minus" class="w-8 h-8 text-brand-primary"></i>
+    </button>
+
+    <!-- QR Modal -->
+    <div id="qrModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-primary/80 backdrop-blur-sm" onclick="toggleQR()">
+        <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-sm w-full text-center relative scale-95" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-brand-primary font-serif font-bold italic">Simpli-FI Life</span>
+                <button onclick="toggleQR()" class="text-slate-400 hover:text-brand-accent">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="bg-brand-canvas p-4 rounded-xl border border-brand-surface mb-4 shadow-inner">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://card.simpli-fi-life.com&color=214F4B" alt="Scan QR Code" class="w-full h-auto rounded-lg mix-blend-multiply">
+            </div>
+            <p class="text-slate-500 text-xs uppercase tracking-widest font-medium mb-4">Scan to Connect</p>
+            <div class="border-t border-dashed border-slate-200 pt-4 mt-2">
+                <p class="text-[10px] text-brand-primary/60 italic mb-2">"Don't forget to document the connection!"</p>
+                <label class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-accent/10 rounded-full text-brand-accent text-xs font-bold cursor-pointer hover:bg-brand-accent hover:text-white transition group w-full justify-center">
+                    <i data-lucide="camera" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                    <span id="camera-text">Take a Selfie</span>
+                    <input type="file" accept="image/*" capture="environment" class="hidden" onchange="handlePhotoCapture(this)">
+                </label>
+            </div>
+        </div>
+    </div>
 
     <script>
         lucide.createIcons();
 
-        // Auto-detect orientation changes (critical for iOS standalone PWA)
-        function handleOrientation() {
-            if (window.innerHeight < window.innerWidth) {
-                document.body.classList.add('force-landscape');
-            } else {
-                document.body.classList.remove('force-landscape');
+        let photoBase64 = '';
+        const currentMission = "Connecting 20 new business owners and program managers in the next 60 days to help them organize their physical spaces and inventory.";
+
+        function expandCard() {
+            document.body.classList.add('show-full');
+        }
+
+        function collapseCard() {
+            document.body.classList.remove('show-full');
+        }
+
+        function toggleQR() {
+            const modal = document.getElementById('qrModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function handlePhotoCapture(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('camera-text').innerText = "Photo Captured!";
+                setTimeout(() => { document.getElementById('camera-text').innerText = "Take Another"; }, 3000);
             }
         }
-        window.addEventListener('resize', handleOrientation);
-        window.addEventListener('orientationchange', handleOrientation);
-        // Initial check
-        handleOrientation();
 
-        function toggleForceLandscape() {
-            document.body.classList.toggle('force-landscape');
+        function setLoading(isLoading) {
+            const icon = document.getElementById('save-icon');
+            const loader = document.getElementById('loading-icon');
+            const text = document.getElementById('save-text');
+            if (isLoading) {
+                icon.classList.add('hidden');
+                loader.classList.remove('hidden');
+                text.innerText = "Saving...";
+            } else {
+                icon.classList.remove('hidden');
+                loader.classList.add('hidden');
+                text.innerText = "Save";
+            }
         }
 
-        // Rest of your original script (physics, vCard, QR, etc.) remains the same
-        // Only added the orientation listener above for reliability
+        async function downloadVCard() {
+            setLoading(true);
+            const addLocation = confirm("Add current location to this contact card?");
+            const generateFile = (locationNote = "") => {
+                const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+                let vcard = `BEGIN:VCARD
+VERSION:3.0
+N:Lott;Lindsey;;;
+FN:Lindsey Lott
+ORG:Simpli-FI Life
+TITLE:Founder & Lead Organizer
+TEL;TYPE=CELL:(214) 769-3343
+EMAIL:Lindsey@simpli-fi-life.com
+URL:https://new.simpli-fi-life.com
+item1.URL:https://id.simpli-fi-os.com/lindsey-lott
+item1.X-ABLabel:Simpli-FI ID
+NOTE:Current Mission: ${currentMission} ${locationNote} | Powered by Simpli-FI OS
+REV:${today}
+`;
+                if (photoBase64) vcard += `PHOTO;ENCODING=b;TYPE=JPEG:${photoBase64}\n`;
+                vcard += `END:VCARD`;
 
-        // ... (your full original <script> content continues here unchanged)
-        
-        // For brevity in this response, I've omitted the full repeated script,
-        // but in your actual file, keep everything from your original script
-        // and just add the handleOrientation block above.
+                const blob = new Blob([vcard], { type: 'text/vcard' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Lindsey_Lott_Simpli-FI.vcf';
+                a.click();
+                URL.revokeObjectURL(url);
+                setLoading(false);
+            };
 
-        // Quick summary of kept parts:
-        // - physics pull gestures
-        // - QR modal
-        // - vCard generation with location prompt
-        // - photo preloading
-        // All unchanged and fully functional.
+            if (addLocation) {
+                navigator.geolocation.getCurrentPosition(
+                    pos => generateFile(`| Met at: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`),
+                    () => generateFile("")
+                );
+            } else {
+                generateFile("");
+            }
+        }
 
+        // Preload photo for vCard
+        window.addEventListener('load', async () => {
+            const img = document.getElementById('profile-photo');
+            try {
+                const res = await fetch(img.src);
+                if (res.ok) {
+                    const blob = await res.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = () => { photoBase64 = reader.result.split(',')[1]; };
+                    reader.readAsDataURL(blob);
+                }
+            } catch (e) {}
+        });
     </script>
 </body>
 </html>
