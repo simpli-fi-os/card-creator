@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Resource Command | Simpli-FI</title>
+    
+    <!-- Tailwind & Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- Firebase SDKs (Compat 11.6.1) -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
+
+    <style>
+        /* DYNAMIC THEME VARIABLES (Default: Simpli-FI Navy/Gold) */
+        :root {
+            --brand-primary: #1e293b; 
+            --brand-accent: #fbbf24;
+            --brand-surface: #F3F4F6;
+        }
+
+        body { background-color: var(--brand-surface); font-family: 'Inter', sans-serif; }
+        .glass-panel { background: white; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .resource-card { transition: all 0.2s; border-left: 4px solid transparent; }
+        .resource-card:active { transform: scale(0.98); }
+        .resource-card:hover { border-left-color: var(--brand-accent); }
+        
+        /* Smooth Fade for Modals */
+        .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        /* Hide scrollbar for category tabs */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Dynamic Text Colors */
+        .text-primary { color: var(--brand-primary); }
+        .bg-primary { background-color: var(--brand-primary); }
+        .border-primary { border-color: var(--brand-primary); }
+        .text-accent { color: var(--brand-accent); }
+        .bg-accent { background-color: var(--brand-accent); }
+        .border-accent { border-color: var(--brand-accent); }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- HEADER -->
+    <header class="bg-primary text-white p-6 sticky top-0 z-40 shadow-lg transition-colors duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+                <!-- DYNAMIC LOGO -->
+                <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-1 shadow-md overflow-hidden">
+                    <img id="org-logo" src="https://raw.githubusercontent.com/simpli-fi-os/simpli-fi-id/d59a8cb075df62d56e3ba6549131ae6cd773dbb1/ID.png" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Resource Command</h1>
+                    <p id="org-name" class="text-[10px] text-white/60 uppercase tracking-wider font-bold">Simpli-FI OS</p>
+                </div>
+            </div>
+            <!-- Profile Avatar (User) -->
+            <div class="w-10 h-10 rounded-full bg-slate-600 border-2 border-accent overflow-hidden relative shadow-md">
+                <img id="user-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hunter" class="w-full h-full object-cover">
+            </div>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="relative">
+            <i data-lucide="search" class="absolute left-3 top-3.5 w-5 h-5 text-slate-400"></i>
+            <input type="text" id="search-input" onkeyup="filterResources()" placeholder="Search assets..." class="w-full pl-10 pr-4 py-3 bg-black/20 border border-white/10 rounded-xl text-sm text-white placeholder-white/40 focus:outline-none focus:border-accent transition shadow-inner">
+        </div>
+    </header>
+
+    <!-- CATEGORY TABS -->
+    <div class="flex gap-2 p-4 overflow-x-auto no-scrollbar sticky top-[136px] bg-brand-surface z-30 pb-2 transition-colors duration-300" style="background-color: var(--brand-surface);">
+        <button onclick="filterCategory('all', this)" class="cat-tab active px-4 py-2 bg-primary text-white text-xs font-bold rounded-full whitespace-nowrap shadow-sm transition-colors border border-primary">All Assets</button>
+        <button onclick="filterCategory('public', this)" class="cat-tab px-4 py-2 bg-white text-slate-600 text-xs font-bold rounded-full whitespace-nowrap border border-slate-200 shadow-sm transition-colors hover:border-primary">Public Info</button>
+        <button onclick="filterCategory('internal', this)" class="cat-tab px-4 py-2 bg-white text-slate-600 text-xs font-bold rounded-full whitespace-nowrap border border-slate-200 shadow-sm transition-colors hover:border-primary">Internal Ops</button>
+        <button onclick="filterCategory('legal', this)" class="cat-tab px-4 py-2 bg-white text-slate-600 text-xs font-bold rounded-full whitespace-nowrap border border-slate-200 shadow-sm transition-colors hover:border-primary">Legal & Forms</button>
+    </div>
+
+    <!-- RESOURCE GRID -->
+    <main id="resource-grid" class="px-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <!-- JS will inject cards here -->
+    </main>
+
+    <!-- FAB (Floating Action Button) - Only for Admins/Founders -->
+    <button onclick="openUploadModal()" class="fixed bottom-6 right-6 w-14 h-14 bg-accent text-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition z-50 border-2 border-white">
+        <i data-lucide="plus" class="w-8 h-8"></i>
+    </button>
+
+    <!-- MODAL: RESOURCE DETAILS (Info Pop-up) -->
+    <div id="details-modal" class="fixed inset-0 z-[60] bg-slate-900/90 backdrop-blur-sm hidden items-center justify-center p-6">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-0 overflow-hidden relative modal-enter shadow-2xl">
+            <!-- Header Image Area -->
+            <div class="h-32 bg-primary relative flex items-center justify-center transition-colors duration-300">
+                <button onclick="closeModal('details-modal')" class="absolute top-4 right-4 p-2 bg-black/20 text-white rounded-full hover:bg-black/40 transition z-10">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div id="detail-icon-bg" class="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white text-4xl shadow-lg border border-white/20">
+                    <!-- Icon Injected Here -->
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <h3 id="detail-title" class="text-2xl font-black text-slate-800 mb-2 leading-tight">Title</h3>
+                    <span id="detail-category" class="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-wider rounded-full">Category</span>
+                </div>
+
+                <div class="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
+                    <p id="detail-desc" class="text-sm text-slate-600 leading-relaxed">Description goes here...</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="detail-open-btn" class="py-3 px-4 bg-primary text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition flex items-center justify-center gap-2 text-sm">
+                        <i data-lucide="external-link" class="w-4 h-4"></i> Preview
+                    </button>
+                    <button id="detail-qr-btn" class="py-3 px-4 bg-white text-primary font-bold rounded-xl shadow border border-slate-200 hover:bg-slate-50 transition flex items-center justify-center gap-2 text-sm">
+                        <i data-lucide="qr-code" class="w-4 h-4"></i> Generate QR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: QR DISPLAY -->
+    <div id="qr-modal" class="fixed inset-0 z-[70] bg-slate-900/95 backdrop-blur-md hidden items-center justify-center p-6">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-8 text-center relative modal-enter shadow-2xl border-4 border-primary transition-colors duration-300">
+            <button onclick="closeModal('qr-modal')" class="absolute top-4 right-4 p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition">
+                <i data-lucide="x" class="w-4 h-4 text-slate-600"></i>
+            </button>
+            
+            <div class="mb-6">
+                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary transition-colors duration-300">
+                    <i data-lucide="scan-line" class="w-6 h-6"></i>
+                </div>
+                <h3 id="qr-title" class="text-xl font-black text-slate-800 mb-1">Resource Title</h3>
+                <p class="text-xs text-slate-500 uppercase tracking-widest font-bold">Trackable Link Generated</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border-2 border-dashed border-slate-300 shadow-sm inline-block mx-auto mb-6 relative">
+                <div class="absolute -top-3 -left-3 w-6 h-6 border-t-4 border-l-4 border-primary rounded-tl-lg transition-colors duration-300"></div>
+                <div class="absolute -top-3 -right-3 w-6 h-6 border-t-4 border-r-4 border-primary rounded-tr-lg transition-colors duration-300"></div>
+                <div class="absolute -bottom-3 -left-3 w-6 h-6 border-b-4 border-l-4 border-primary rounded-bl-lg transition-colors duration-300"></div>
+                <div class="absolute -bottom-3 -right-3 w-6 h-6 border-b-4 border-r-4 border-primary rounded-br-lg transition-colors duration-300"></div>
+                <div id="qrcode"></div>
+            </div>
+            
+            <p class="text-[10px] text-slate-400 mb-4">This QR code is unique to you. Scans will be tracked in your dashboard.</p>
+
+            <button onclick="closeModal('qr-modal')" class="w-full py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition text-sm">
+                Done
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL: UPLOAD RESOURCE (Admin Only) -->
+    <div id="upload-modal" class="fixed inset-0 z-[60] bg-slate-900/90 backdrop-blur-sm hidden items-center justify-center p-6">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative modal-enter">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-bold text-slate-800">Add New Resource</h2>
+                <button onclick="closeModal('upload-modal')" class="p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition">
+                    <i data-lucide="x" class="w-4 h-4 text-slate-600"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Resource Title</label>
+                    <input type="text" id="new-title" placeholder="e.g. Q4 Pricing Guide" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-accent">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Destination URL</label>
+                    <input type="url" id="new-url" placeholder="https://..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-accent">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Description</label>
+                    <textarea id="new-desc" rows="2" placeholder="Brief description..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-accent"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Category</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="selectUploadCategory('public')" class="cat-btn py-2 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 border border-transparent hover:border-accent focus:bg-primary focus:text-white transition">Public</button>
+                        <button onclick="selectUploadCategory('internal')" class="cat-btn py-2 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 border border-transparent hover:border-accent focus:bg-primary focus:text-white transition">Internal</button>
+                        <button onclick="selectUploadCategory('legal')" class="cat-btn py-2 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 border border-transparent hover:border-accent focus:bg-primary focus:text-white transition">Legal/Form</button>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="saveResource()" class="w-full py-4 bg-accent text-primary font-bold rounded-xl shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i> Add to Catalog
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        // In production, these come from the authenticated User object
+        const currentUser = {
+            id: "hunter_lott",
+            org_id: "simpli_fi_os", 
+            // org_id: "denton_fire_dept", // Toggle this to test branding
+        };
+
+        const branding = {
+            "simpli_fi_os": { primary: "#1e293b", accent: "#fbbf24", name: "Simpli-FI OS", logo: "https://raw.githubusercontent.com/simpli-fi-os/simpli-fi-id/d59a8cb075df62d56e3ba6549131ae6cd773dbb1/ID.png" },
+            "denton_fire_dept": { primary: "#b91c1c", accent: "#fbbf24", name: "Denton Fire Dept", logo: "https://files.constantcontact.com/3720c3fd901/10017eb4-f7d2-424d-92ed-c1b5424b9869.png" }
+        };
+
+        // --- INIT ---
+        window.onload = function() {
+            applyBranding();
+            renderResources(resources); // Initial load
+            lucide.createIcons();
+        };
+
+        function applyBranding() {
+            const config = branding[currentUser.org_id] || branding["simpli_fi_os"];
+            
+            document.documentElement.style.setProperty('--brand-primary', config.primary);
+            document.documentElement.style.setProperty('--brand-accent', config.accent);
+            
+            document.getElementById('org-name').innerText = config.name;
+            document.getElementById('org-logo').src = config.logo;
+        }
+
+        // --- RESOURCE DATA (Mock) ---
+        let resources = [
+            {
+                id: 1,
+                title: "2025 Pricing Guide",
+                category: "public",
+                url: "https://example.com/pricing.pdf",
+                desc: "Standard rate card for Q1 2025. Includes Enterprise tiers.",
+                icon: "file-text",
+                color: "text-blue-500",
+                bg: "bg-blue-50"
+            },
+            {
+                id: 2,
+                title: "Intro Video (Vimeo)",
+                category: "public",
+                url: "https://vimeo.com/123456",
+                desc: "30-second explainer video for cold leads.",
+                icon: "video",
+                color: "text-purple-500",
+                bg: "bg-purple-50"
+            },
+            {
+                id: 3,
+                title: "Contract Template",
+                category: "legal",
+                url: "https://docusign.com/template/123",
+                desc: "Standard NDA and Service Agreement.",
+                icon: "file-signature",
+                color: "text-slate-600",
+                bg: "bg-slate-100"
+            },
+            {
+                id: 4,
+                title: "Internal Sales Script",
+                category: "internal",
+                url: "https://notion.so/script",
+                desc: "Objection handling script for 'Budget' pushback.",
+                icon: "mic",
+                color: "text-orange-500",
+                bg: "bg-orange-50"
+            }
+        ];
+
+        // --- RENDER LOGIC ---
+        function renderResources(data) {
+            const grid = document.getElementById('resource-grid');
+            grid.innerHTML = '';
+
+            data.forEach(item => {
+                const card = `
+                    <div class="resource-card glass-panel rounded-2xl p-4 flex items-center justify-between cursor-pointer group hover:shadow-lg" onclick="openDetails(${item.id})">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 border border-black/5 shadow-sm">
+                                <i data-lucide="${item.icon}" class="w-7 h-7"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-bold text-slate-800 text-sm leading-tight mb-1 group-hover:text-primary truncate transition-colors">${item.title}</h3>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50 px-2 py-0.5 rounded border border-slate-100">${item.category}</span>
+                            </div>
+                        </div>
+                        <div class="ml-2 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 border border-slate-100 group-hover:bg-accent group-hover:text-primary group-hover:border-accent transition shadow-sm">
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+            lucide.createIcons();
+        }
+
+        // --- FILTER LOGIC ---
+        function filterResources() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = resources.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.desc.toLowerCase().includes(query)
+            );
+            renderResources(filtered);
+        }
+
+        function filterCategory(cat, btn) {
+            // Update Active Tab Style
+            document.querySelectorAll('.cat-tab').forEach(el => {
+                el.classList.remove('bg-primary', 'text-white', 'border-primary');
+                el.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+            });
+            btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+            btn.classList.add('bg-primary', 'text-white', 'border-primary');
+
+            // Filter Data
+            if (cat === 'all') {
+                renderResources(resources);
+            } else {
+                const filtered = resources.filter(item => item.category === cat);
+                renderResources(filtered);
+            }
+        }
+
+        // --- MODAL: DETAILS ---
+        function openDetails(id) {
+            const item = resources.find(r => r.id === id);
+            if (!item) return;
+
+            // Populate Modal
+            document.getElementById('detail-title').innerText = item.title;
+            document.getElementById('detail-category').innerText = item.category;
+            document.getElementById('detail-desc').innerText = item.desc;
+            
+            // Icon Logic
+            const iconBg = document.getElementById('detail-icon-bg');
+            iconBg.innerHTML = `<i data-lucide="${item.icon}" class="w-10 h-10 ${item.color}"></i>`;
+            
+            // Buttons
+            document.getElementById('detail-open-btn').onclick = () => window.open(item.url, '_blank');
+            document.getElementById('detail-qr-btn').onclick = () => {
+                closeModal('details-modal');
+                // GENERATE TRACKING LINK HERE
+                // Format: https://link.simpli-fi.com/r/{resourceID}?ref={userID}
+                const trackingLink = `https://link.simpli-fi-os.com/r/${item.id}?ref=${currentUser.id}`;
+                openQR(item.title, trackingLink);
+            };
+
+            // Show Modal
+            const modal = document.getElementById('details-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        // --- MODAL: QR CODE ---
+        function openQR(title, url) {
+            document.getElementById('qr-title').innerText = title;
+            const container = document.getElementById('qrcode');
+            container.innerHTML = ""; // Clear previous
+            
+            // Generate QR from dynamic tracking link
+            new QRCode(container, {
+                text: url,
+                width: 180,
+                height: 180,
+                colorDark : getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim(),
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            const modal = document.getElementById('qr-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // --- UPLOAD LOGIC ---
+        function openUploadModal() {
+            const modal = document.getElementById('upload-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        let selectedCategory = 'public';
+        function selectUploadCategory(cat) { selectedCategory = cat; }
+
+        function saveResource() {
+            const title = document.getElementById('new-title').value;
+            const url = document.getElementById('new-url').value;
+            const desc = document.getElementById('new-desc').value;
+            
+            if(!title || !url) return alert("Please fill in title and URL");
+
+            resources.unshift({
+                id: Date.now(),
+                title: title,
+                category: selectedCategory,
+                url: url,
+                desc: desc || "No description provided.",
+                icon: "link",
+                color: "text-slate-500",
+                bg: "bg-slate-100"
+            });
+
+            renderResources(resources);
+            closeModal('upload-modal');
+            
+            document.getElementById('new-title').value = "";
+            document.getElementById('new-url').value = "";
+            document.getElementById('new-desc').value = "";
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    </script>
+</body>
+</html>
